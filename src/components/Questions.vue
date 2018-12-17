@@ -1,17 +1,15 @@
 <template>
   <div class="questions">
     <h1>Questions</h1>
-    <p class='category' v-html='question.category'></p>
-    <p class='question' v-html='question.question'></p>
+    <p class='category' v-html='getQuestion.category'></p>
+    <p class='question' v-html='getQuestion.question'></p>
     <p class='questionNumber'>{{ $route.params.id }}/10</p>
     <button class='button' @click='nextQuestion' value='True'>True</button>
     <button class='button' @click='nextQuestion' value='False'>False</button>
-
   </div>
 </template>
 
 <script>
-import questions from '../service/questions.js'
 export default {
   name: 'Questions',
   data() {
@@ -21,12 +19,9 @@ export default {
   },
   methods : {
      nextQuestion(e) {
-       // console.log('user answer', e.target.value);
-        console.log(this.api)
-        this.question.user_answer = e.target.value
+        this.getQuestion.user_answer = e.target.value
 
         if(Number(this.$route.params.id) === 10) {
-            console.log('route');
             this.$router.push({ path: `/answers`})
         } else {
         this.$router.push({ path: `/questions/${parseInt(this.$route.params.id)+1}`})
@@ -35,14 +30,12 @@ export default {
      }
   },
   computed: {
-      question : function () {
-      //  console.log('api',this.api, questions)
-        this.api = questions
-        return this.api.results[Number(this.$route.params.id)-1]
-      }
+      getQuestion () { 
+         return this.$store.getters.getQuestion(Number(this.$route.params.id)-1)
+      }  
   },
   mounted() {
-       if(!this.api.results) {
+       if(this.$store.state.questions.length !== 10) {
           this.$router.push({ path: `/`})
       }
   }

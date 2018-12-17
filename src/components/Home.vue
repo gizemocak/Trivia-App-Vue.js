@@ -8,29 +8,21 @@
 </template>
 
 <script>
-import questions from '../service/questions.js'
+
 
 export default {
   name: 'Home',
   data() {
       return {
-          api: {},
       }
   },
   methods: {
-      getApi() {
-          
-          fetch('https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean')
-            .then((resp) => resp.json())
-            .then((resp) => { 
-                console.log('resp', resp)
-                this.api = resp.results
-                questions['results'] = this.api
-                this.$router.push({ path: 'questions/1'});
-            })
-          }
-      },
+      async getApi() {
+                await this.$store.dispatch('fetchQuestions')
+                this.$router.push({ path: "questions/1" })
+            }
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

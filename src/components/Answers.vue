@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import questions from '../service/questions.js'
+
 
 export default {
   name: 'Answers',
@@ -35,7 +35,7 @@ export default {
       }
   },
   mounted(){
-      this.info = questions.results
+      this.info = this.$store.state.questions
 
       if(!this.info){
           this.$router.push({ path: `/`})
